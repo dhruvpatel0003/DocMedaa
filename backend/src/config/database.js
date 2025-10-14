@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
-// MongoDB connection URL - Replace with your actual MongoDB URL
+//NEED TO UPDATE
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/docmedaa';
 
-// Connect to MongoDB
 const connectDB = async () => {
     try {
         const connection = await mongoose.connect(MONGODB_URI);
