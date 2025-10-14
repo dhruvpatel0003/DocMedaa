@@ -8,7 +8,7 @@ const clinicTimingSchema = new mongoose.Schema({
 
 const doctorSchema = new mongoose.Schema({
   fullName: { type: String },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   phone: { type: String },
   age: { type: Number },

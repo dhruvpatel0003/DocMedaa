@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const patientSchema = new mongoose.Schema({
   // auth fields included for Sprint 1 approach
   fullName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   password: { type: String, required: true },
   phone: { type: String },
   age: { type: Number },
