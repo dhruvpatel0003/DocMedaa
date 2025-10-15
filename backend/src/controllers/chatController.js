@@ -26,7 +26,7 @@ exports.sendMessage = async (req, res) => {
   try {
     const newMessage = await Message.create({
       conversationId,
-      senderId: req.user._id,
+      senderId: req.user.id,
       message,
     });
     res.status(201).json(newMessage);
