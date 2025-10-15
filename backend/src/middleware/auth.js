@@ -1,36 +1,22 @@
-// Dummy authentication middleware for demonstration
-// In a real application, you would implement proper JWT verification
+const jwt = require('jsonwebtoken');
 
-exports.protect = (req, res, next) => {
-    try {
-        // Get token from header
-        const token = req.header('Authorization')?.replace('Bearer ', '');
+const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';
 
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                error: 'Not authorized to access this route'
-            });
-        }
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
 
-        // In a real application, you would verify the JWT token here
-        // and set the user information in the request object
-        // For this dummy example, we'll just pass through
+  const parts = authHeader.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') return res.status(401).json({ message: 'Token error' });
 
-        next();
-    } catch (error) {
-        res.status(401).json({
-            success: false,
-            error: 'Not authorized to access this route'
-        });
-    }
+  const token = parts[1];
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded; // contains id and role
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
 };
 
-// Role authorization middleware
-exports.authorize = (...roles) => {
-    return (req, res, next) => {
-        // In a real application, you would check the user's role
-        // For this dummy example, we'll just pass through
-        next();
-    };
-};
+module.exports = authMiddleware;
