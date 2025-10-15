@@ -38,6 +38,8 @@ const run = async () => {
       {
         fullName: 'Emma Brown',
         email: 'emma.brown@example.com',
+        // secondemail : 'emma1.brown@example.com',pass : "pass22"
+
         password: pass2,
         phone: '+1-917-555-0478',
         age: 29,
