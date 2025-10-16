@@ -1,6 +1,7 @@
 import Appointment from "../models/appointment.js";
 import Doctor from "../models/doctor.js";
 import Patient from "../models/patient.js";
+import Notification from "../models/notification.js";
 
 export const bookAppointment = async (req, res) => {
     try {
@@ -26,6 +27,14 @@ export const bookAppointment = async (req, res) => {
             notes,
             appointmentType,
             symptoms,
+        });
+
+        await Notification.create({
+            recipient: doctorId,
+            sender: userID,
+            type: "Appointment",
+            title: "New Appointment Booked",
+            message: `You have a new appointment booked by ${patient.fullName} on ${new Date(appointmentDate).toLocaleDateString()} from ${selectedTimeSlot.from} to ${selectedTimeSlot.to} ${selectedTimeSlot.period}.`,
         });
 
         res.status(201).json({
@@ -99,7 +108,7 @@ export const updateAppointmentStatus = async (req, res) => {
 export const cancelAppointment = async (req, res) => {
     try {
         const { appointment_id } = req.params;
-
+        const { appointment_with  } = req.body; //NEED TO UPDATE LOGIC
         const appointmentValidation = await Appointment.findById(appointment_id);
 
         const isPatient = appointmentValidation.patient._id.toString() === req.user.id;
@@ -109,6 +118,13 @@ export const cancelAppointment = async (req, res) => {
             return res.status(403).json({ message: 'Access denied. You are not authorized to update this appointment.' });
         }
 
+        await Notification.create({
+                recipient: appointment_with,
+                sender: req.user.id,
+                type: "Appointment",
+                title: "Appointment Cancelled",
+                message: `Appointment Cancelled by ${req.user.role}`,
+            });
 
         await Appointment.findByIdAndDelete(
             appointment_id,

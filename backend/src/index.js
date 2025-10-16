@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 // const Message = require('./models/message');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 app.use(express.json());
@@ -35,6 +36,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/api/auth', authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.get('/', (req, res) => res.send('DocMedaa API running'));
 
 app.listen(PORT, () => {
