@@ -24,7 +24,13 @@ const doctorSchema = new mongoose.Schema({
   educationLevel: String,
   licenseNumber: String,
   specialty: String,
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
 });
 
 // ensure email index
