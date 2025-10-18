@@ -2,8 +2,93 @@ const bcrypt = require('bcryptjs');
 const Doctor = require('../models/doctor');
 const Patient = require('../models/patient');
 const generateToken = require('../utils/generateToken');
+const sendEmail = require('../utils/sendEmail.js');
+const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';//NEEDS TO UPDATE
+  const jwt = require('jsonwebtoken');
 
 const SALT_ROUNDS = 10;
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    //NEEDS TO UPDATE
+    let user = await Patient.findOne({ email });
+    if(!user){
+      user = await Doctor.findOne({ email });
+    }
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "15m" });
+
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 1 hour
+    await user.save();
+
+    const resetLink = `http://localhost:5000/api/auth/reset-password-verify/${token}`;
+
+    const emailHtml = `
+      <h2>Password Reset - DocMedaa</h2>
+      <p>Click the link below to reset your password:</p>
+      <a href="${resetLink}" target="_blank">${resetLink}</a>
+      <p>This link is valid for 15 minutes.</p>
+    `;
+
+    await sendEmail(user.email, "Reset your DocMedaa password", emailHtml);
+
+    return res.status(200).json({ message: "Reset email sent successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error sending reset email" });
+  }
+};
+
+const verifyResetToken = async (req, res) => {
+try {
+    const { token } = req.params;
+    const decoded = jwt.verify(token, JWT_SECRET);
+    let user = await Patient.findById(decoded.id) || await Doctor.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (user.resetPasswordToken != token)
+      return res.status(400).json({ message: "Invalid token" });
+
+    if (user.resetPasswordExpires < Date.now())
+      return res.status(400).json({ message: "Token expired" });
+
+    res.status(200).json({ message: "Token valid", userId: user.id });
+  } catch (error) {
+    console.error("Token verification failed:", error.message);
+    res.status(400).json({ message: "Invalid or expired token" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    //NEEDS TO UPDATE
+    let user = await Patient.findById(decoded.id) || await Doctor.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user.resetPasswordToken || user.resetPasswordToken !== token) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Password reset failed" });
+  }
+};
 
 const signup = async (req, res) => {
   try {
@@ -93,4 +178,4 @@ const completeProfile = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, completeProfile };
+module.exports = { signup, login, completeProfile, forgotPassword, verifyResetToken, resetPassword };
