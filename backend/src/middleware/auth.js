@@ -1,6 +1,6 @@
   const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';
+const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';//NEEDS TO UPDATE
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
