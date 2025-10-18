@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';
+const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';//NEEDS TO UPDATE
 const JWT_EXPIRES = '7d';
 
 const generateToken = (payload) => {

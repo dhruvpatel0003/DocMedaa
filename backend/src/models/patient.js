@@ -13,7 +13,13 @@ const patientSchema = new mongoose.Schema({
   healthConditions: [String],
   treatments: [String],
   wearableLinkedDevices: [String],
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
+  },
 });
 
 patientSchema.index({ email: 1 }, { unique: true });
