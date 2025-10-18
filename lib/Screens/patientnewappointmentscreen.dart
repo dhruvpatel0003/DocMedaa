@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PatientNewAppointmentScreen extends StatefulWidget {
-  const PatientNewAppointmentScreen({Key? key}) : super(key: key);
+  const PatientNewAppointmentScreen({super.key}); // ✅ Fixed super parameter
 
   @override
   State<PatientNewAppointmentScreen> createState() =>
@@ -10,7 +10,6 @@ class PatientNewAppointmentScreen extends StatefulWidget {
 
 class _PatientNewAppointmentScreenState
     extends State<PatientNewAppointmentScreen> {
-  // --- Mock data ---
   final List<String> doctors = [
     'Dr. Sarah Johnson',
     'Dr. Ravi Patel',
@@ -33,7 +32,6 @@ class _PatientNewAppointmentScreenState
     '03:00 PM - 03:30 PM': false,
   };
 
-  // --- State ---
   String? selectedDoctor;
   String? selectedLocation;
   DateTime? selectedDate;
@@ -41,9 +39,9 @@ class _PatientNewAppointmentScreenState
   String appointmentType = 'In-Person';
   final TextEditingController notesController = TextEditingController();
 
-  // --- Helpers ---
   String _formatDate(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')} ${_monthName(d.month)} ${d.year}';
+
   String _monthName(int m) {
     const months = [
       'Jan',
@@ -74,7 +72,6 @@ class _PatientNewAppointmentScreenState
   }
 
   void _save() {
-    // This is mock saving: prints to console and shows a snackbar.
     final selectedDateStr =
         selectedDate != null ? _formatDate(selectedDate!) : 'Not selected';
     debugPrint('--- Appointment (mock) ---');
@@ -86,17 +83,18 @@ class _PatientNewAppointmentScreenState
     debugPrint('Notes: ${notesController.text}');
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Appointment saved (mock).')),
+      const SnackBar(
+        content: Text('Appointment saved (mock).'),
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
-  // Responsive breakpoint
   static const double kDesktopBreakpoint = 800;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar hidden on desktop-like layout (we'll render custom top row).
       body: LayoutBuilder(builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= kDesktopBreakpoint;
         return SafeArea(
@@ -107,12 +105,12 @@ class _PatientNewAppointmentScreenState
   }
 
   // ---------------------------
-  // Desktop / wide-screen layout
+  // Desktop Layout
   // ---------------------------
   Widget _buildDesktop(BuildContext context) {
     return Row(
       children: [
-        // Sidebar (matches screenshot)
+        // Sidebar
         Container(
           width: 220,
           color: const Color(0xFFF7F7F7),
@@ -123,9 +121,10 @@ class _PatientNewAppointmentScreenState
               const Text(
                 'DocMedaa',
                 style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF0046AD)),
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0046AD),
+                ),
               ),
               const SizedBox(height: 20),
               _sidebarItem(Icons.notifications_outlined, 'Notification'),
@@ -163,9 +162,10 @@ class _PatientNewAppointmentScreenState
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(
-                          color: Color(0x11000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 4))
+                        color: Color(0x11000000),
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      )
                     ],
                   ),
                   child: Column(
@@ -217,19 +217,20 @@ class _PatientNewAppointmentScreenState
           ],
         ),
 
-        // Save button and profile preview
+        // Save + Profile
         Row(
           children: [
-            ElevatedButton.icon(
+            FilledButton.icon(
               onPressed: _save,
               icon: const Icon(Icons.save),
               label: const Text('Save'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0046AD),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+              style: ButtonStyle(
+                backgroundColor:
+                    WidgetStateProperty.all(const Color(0xFF0046AD)),
+                padding: WidgetStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12)),
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8))),
               ),
             ),
             const SizedBox(width: 12),
@@ -244,15 +245,13 @@ class _PatientNewAppointmentScreenState
   }
 
   Widget _buildFormContent({required bool isDesktop}) {
-    // Form parts arranged in columns similar to screenshot
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Row: Doctor and Date
+        // Doctor & Date Row
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Left column: Doctor + dropdowns
             Expanded(
               flex: 2,
               child: Column(
@@ -269,7 +268,6 @@ class _PatientNewAppointmentScreenState
                     onChanged: (v) => setState(() => selectedDoctor = v),
                   ),
                   const SizedBox(height: 18),
-
                   const Text('Select Location',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
@@ -283,10 +281,7 @@ class _PatientNewAppointmentScreenState
                 ],
               ),
             ),
-
             const SizedBox(width: 18),
-
-            // Right column: Date & time & available slots
             Expanded(
               flex: 3,
               child: Column(
@@ -317,7 +312,6 @@ class _PatientNewAppointmentScreenState
                     ),
                   ),
                   const SizedBox(height: 16),
-
                   const Text('Available Slots',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
@@ -330,32 +324,34 @@ class _PatientNewAppointmentScreenState
                       final available = e.value;
                       final selected = selectedSlot == time;
                       return ChoiceChip(
-                        label: Text(time +
-                            (available ? '' : ' • Not available')), // label
+                        label: Text(
+                          time + (available ? '' : ' • Not available'),
+                        ),
                         selected: selected,
                         onSelected: available
-                            ? (v) => setState(() => selectedSlot = v ? time : null)
+                            ? (v) =>
+                                setState(() => selectedSlot = v ? time : null)
                             : null,
                         backgroundColor: Colors.grey.shade100,
                         selectedColor: const Color(0xFF0046AD),
                         labelStyle: TextStyle(
                             color: selected ? Colors.white : Colors.black87),
                         side: BorderSide(
-                            color: available ? Colors.transparent : Colors.red),
+                            color:
+                                available ? Colors.transparent : Colors.red),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 10),
                       );
                     }).toList(),
-                  )
+                  ),
                 ],
               ),
             ),
           ],
         ),
-
         const SizedBox(height: 20),
 
-        // Appointment type and Notes
+        // Appointment Type + Notes
         Row(
           children: [
             Expanded(
@@ -369,19 +365,21 @@ class _PatientNewAppointmentScreenState
                   const SizedBox(height: 8),
                   Row(
                     children: [
+                      // ignore: deprecated_member_use
                       Radio<String>(
                         value: 'In-Person',
                         groupValue: appointmentType,
-                        onChanged: (v) =>
-                            setState(() => appointmentType = v ?? appointmentType),
+                        onChanged: (v) => setState(
+                            () => appointmentType = v ?? appointmentType),
                       ),
                       const Text('In-Person'),
                       const SizedBox(width: 18),
+                      // ignore: deprecated_member_use
                       Radio<String>(
                         value: 'Virtual',
                         groupValue: appointmentType,
-                        onChanged: (v) =>
-                            setState(() => appointmentType = v ?? appointmentType),
+                        onChanged: (v) => setState(
+                            () => appointmentType = v ?? appointmentType),
                       ),
                       const Text('Virtual'),
                     ],
@@ -406,37 +404,37 @@ class _PatientNewAppointmentScreenState
                       filled: true,
                       fillColor: Colors.grey.shade100,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none),
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                       hintText: 'Add any notes here...',
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
-
         const SizedBox(height: 24),
 
-        // Bottom action row (desktop)
         Row(
           children: [
-            Expanded(
-              child: Container(), // spacer
-            ),
-            ElevatedButton(
+            const Spacer(),
+            FilledButton(
               onPressed: _save,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF0046AD),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+              style: ButtonStyle(
+                backgroundColor:
+                    WidgetStateProperty.all(const Color(0xFF0046AD)),
+                padding: WidgetStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14)),
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10))),
               ),
-              child: const Text('Book Appointment',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            )
+              child: const Text(
+                'Book Appointment',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ],
         ),
       ],
@@ -470,12 +468,11 @@ class _PatientNewAppointmentScreenState
   }
 
   // ---------------------------
-  // Mobile layout
+  // Mobile Layout
   // ---------------------------
   Widget _buildMobile(BuildContext context) {
     return Column(
       children: [
-        // top appbar
         AppBar(
           backgroundColor: const Color(0xFF0046AD),
           title: const Text('New Appointment'),
@@ -483,7 +480,7 @@ class _PatientNewAppointmentScreenState
             IconButton(
               icon: const Icon(Icons.save),
               onPressed: _save,
-            )
+            ),
           ],
         ),
         Expanded(
@@ -492,7 +489,6 @@ class _PatientNewAppointmentScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // doctor card
                 const Text('Select Doctor',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
@@ -566,15 +562,19 @@ class _PatientNewAppointmentScreenState
                     final available = e.value;
                     return ListTile(
                       leading: Radio<String>(
+                        // ignore: deprecated_member_use
                         value: time,
                         groupValue: selectedSlot,
-                        onChanged:
-                            available ? (v) => setState(() => selectedSlot = v) : null,
+                        onChanged: available
+                            ? (v) => setState(() => selectedSlot = v)
+                            : null,
                       ),
                       title: Text(time),
-                      trailing: Text(available ? 'Available' : 'Not available',
-                          style: TextStyle(
-                              color: available ? Colors.green : Colors.red)),
+                      trailing: Text(
+                        available ? 'Available' : 'Not available',
+                        style: TextStyle(
+                            color: available ? Colors.green : Colors.red),
+                      ),
                     );
                   }).toList(),
                 ),
@@ -585,6 +585,7 @@ class _PatientNewAppointmentScreenState
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 Row(
                   children: [
+                    // ignore: deprecated_member_use
                     Radio<String>(
                       value: 'In-Person',
                       groupValue: appointmentType,
@@ -592,6 +593,7 @@ class _PatientNewAppointmentScreenState
                     ),
                     const Text('In-Person'),
                     const SizedBox(width: 12),
+                    // ignore: deprecated_member_use
                     Radio<String>(
                       value: 'Virtual',
                       groupValue: appointmentType,
@@ -624,30 +626,30 @@ class _PatientNewAppointmentScreenState
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.grey.shade100,
+                    hintText: 'Add notes here...',
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none),
-                    hintText: 'Add notes...',
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
+                const SizedBox(height: 22),
+                Center(
+                  child: ElevatedButton.icon(
                     onPressed: _save,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0046AD),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 28, vertical: 14),
                     ),
-                    child: const Text('Book Appointment',
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    icon: const Icon(Icons.done),
+                    label: const Text(
+                      'Book Appointment',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
