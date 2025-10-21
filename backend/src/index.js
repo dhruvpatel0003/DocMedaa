@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 // const Message = require('./models/message');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const articleRoutes = require('./routes/articleRoutes');
 const notificationRoutes = require("./routes/notificationRoutes");
 const sendAppointmentReminder = require("./utils/appointmentReminderEmail.js");
 
@@ -40,6 +41,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/articles", articleRoutes);
 app.get('/', (req, res) => res.send('DocMedaa API running'));
 
 app.listen(PORT, () => {
