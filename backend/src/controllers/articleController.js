@@ -6,6 +6,10 @@ export const createArticle = async (req, res) => {
         return res.status(403).json({ message: "Forbidden: Only Doctors and Admins can create articles" });
     }
     const { title, description, category, author, imageUrl, resources } = req.body;
+    const isArticleCreated = await Article.findOne({ title });
+    if(isArticleCreated) {
+      return res.status(400).json({ message: "Article with this title already exists" });
+    }
     const article = new Article({ title, description, category, author, imageUrl, resources });
     await article.save();
     res.status(201).json({ message: "Article created successfully", article });
