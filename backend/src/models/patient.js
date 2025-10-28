@@ -13,6 +13,7 @@ const patientSchema = new mongoose.Schema({
   healthConditions: [String],
   treatments: [String],
   wearableLinkedDevices: [String],
+  bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
   createdAt: { type: Date, default: Date.now },
   resetPasswordToken: {
     type: String,
