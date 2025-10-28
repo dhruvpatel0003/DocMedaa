@@ -69,12 +69,8 @@ export const toggleBookmark = async (req, res) => {
 
 export const getBookmarks = async (req, res) => {
   try {
-    console.log(req.user);
     const userId = req.user.id;
     const userRole = req.user.role;
-    // console.log(userRole === "Doctor",user,userId,userRole);
-    console.log("insideeeeeeeeeeeee");
-
     let user =
       userRole === "Doctor"
         ? await Doctor.findOne({ _id: userId }).populate("bookmarks")
