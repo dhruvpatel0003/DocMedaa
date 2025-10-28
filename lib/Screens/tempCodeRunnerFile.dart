@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/appointment.dart';
 
 class PatientNewAppointmentScreen extends StatefulWidget {
-  const PatientNewAppointmentScreen({
-    super.key,
-    this.initial,         // pass existing appt to edit/reschedule
-    this.mode = 'create', // 'create' | 'edit'
-  });
-
-  final Appointment? initial;
-  final String mode;
+  const PatientNewAppointmentScreen({super.key}); // ✅ Fixed super parameter
 
   @override
   State<PatientNewAppointmentScreen> createState() =>
@@ -47,87 +39,58 @@ class _PatientNewAppointmentScreenState
   String appointmentType = 'In-Person';
   final TextEditingController notesController = TextEditingController();
 
-  static const double kDesktopBreakpoint = 800;
-
-  @override
-  void initState() {
-    super.initState();
-    final a = widget.initial;
-    if (a != null) {
-      selectedDoctor   = a.doctorName;
-      appointmentType  = a.type;
-      selectedLocation = a.location == 'Virtual' ? null : a.location;
-      selectedDate     = a.date;
-      selectedSlot     = a.slot;
-      notesController.text = a.notes;
-    }
-  }
-
-  @override
-  void dispose() {
-    notesController.dispose();
-    super.dispose();
-  }
-
-  bool get _isComplete =>
-      selectedDoctor != null &&
-      selectedDate != null &&
-      selectedSlot != null &&
-      (appointmentType == 'Virtual' || selectedLocation != null);
-
   String _formatDate(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')} ${_monthName(d.month)} ${d.year}';
+
   String _monthName(int m) {
     const months = [
-      'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[m - 1];
   }
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
     final picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? today,
-      firstDate: today,
+      initialDate: selectedDate ?? now,
+      firstDate: now,
       lastDate: DateTime(now.year + 2),
     );
-    if (picked != null) {
-      setState(() {
-        selectedDate = picked;
-        selectedSlot = null; // clear slot when date changes
-      });
-    }
+    if (picked != null) setState(() => selectedDate = picked);
   }
 
-  // create or update appointment and return it
   void _save() {
-    if (!_isComplete) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please complete all required fields.')),
-      );
-      return;
-    }
+    final selectedDateStr =
+        selectedDate != null ? _formatDate(selectedDate!) : 'Not selected';
+    debugPrint('--- Appointment (mock) ---');
+    debugPrint('Doctor: $selectedDoctor');
+    debugPrint('Date: $selectedDateStr');
+    debugPrint('Slot: $selectedSlot');
+    debugPrint('Type: $appointmentType');
+    debugPrint('Location: $selectedLocation');
+    debugPrint('Notes: ${notesController.text}');
 
-    final id =
-        widget.initial?.id ?? DateTime.now().millisecondsSinceEpoch.toString();
-
-    final appt = Appointment(
-      id: id,
-      doctorName: selectedDoctor!,
-      location: appointmentType == 'Virtual'
-          ? 'Virtual'
-          : (selectedLocation ?? 'Unknown'),
-      date: selectedDate!,
-      slot: selectedSlot!,
-      type: appointmentType,
-      notes: notesController.text,
-      status: widget.initial?.status ?? 'Scheduled',
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Appointment saved (mock).'),
+        behavior: SnackBarBehavior.floating,
+      ),
     );
-
-    Navigator.pop(context, appt);
   }
+
+  static const double kDesktopBreakpoint = 800;
 
   @override
   Widget build(BuildContext context) {
@@ -174,8 +137,8 @@ class _PatientNewAppointmentScreenState
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const SizedBox(height: 16),
-              const Row(
-                children: [
+              Row(
+                children: const [
                   Icon(Icons.close, size: 14),
                   SizedBox(width: 6),
                   Text('Close', style: TextStyle(fontSize: 13)),
@@ -236,8 +199,6 @@ class _PatientNewAppointmentScreenState
   }
 
   Widget _buildTopRow() {
-    final title =
-        widget.mode == 'edit' ? 'Edit Appointment' : 'New Appointment';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -249,9 +210,10 @@ class _PatientNewAppointmentScreenState
               icon: const Icon(Icons.arrow_back_ios_new),
             ),
             const SizedBox(width: 6),
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              'New Appointment',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
 
@@ -259,15 +221,15 @@ class _PatientNewAppointmentScreenState
         Row(
           children: [
             FilledButton.icon(
-              onPressed: _isComplete ? _save : null,
+              onPressed: _save,
               icon: const Icon(Icons.save),
               label: const Text('Save'),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(const Color(0xFF0046AD)),
-                padding: MaterialStateProperty.all(
+                    WidgetStateProperty.all(const Color(0xFF0046AD)),
+                padding: WidgetStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 12)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8))),
               ),
             ),
@@ -306,18 +268,16 @@ class _PatientNewAppointmentScreenState
                     onChanged: (v) => setState(() => selectedDoctor = v),
                   ),
                   const SizedBox(height: 18),
-                  if (appointmentType == 'In-Person') ...[
-                    const Text('Select Location',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    const SizedBox(height: 8),
-                    _decoratedDropdown<String>(
-                      value: selectedLocation,
-                      hint: 'Choose location',
-                      items: locations.where((l) => l != 'Virtual').toList(),
-                      onChanged: (v) => setState(() => selectedLocation = v),
-                    ),
-                  ],
+                  const Text('Select Location',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 8),
+                  _decoratedDropdown<String>(
+                    value: selectedLocation,
+                    hint: 'Choose location',
+                    items: locations,
+                    onChanged: (v) => setState(() => selectedLocation = v),
+                  ),
                 ],
               ),
             ),
@@ -363,16 +323,9 @@ class _PatientNewAppointmentScreenState
                       final time = e.key;
                       final available = e.value;
                       final selected = selectedSlot == time;
-                      final disabledStyle = TextStyle(
-                        color: Colors.grey.shade500,
-                        decoration: TextDecoration.lineThrough,
-                      );
                       return ChoiceChip(
                         label: Text(
-                          available ? time : '$time • Not available',
-                          style: selected
-                              ? const TextStyle(color: Colors.white)
-                              : (available ? null : disabledStyle),
+                          time + (available ? '' : ' • Not available'),
                         ),
                         selected: selected,
                         onSelected: available
@@ -412,6 +365,7 @@ class _PatientNewAppointmentScreenState
                   const SizedBox(height: 8),
                   Row(
                     children: [
+                      // ignore: deprecated_member_use
                       Radio<String>(
                         value: 'In-Person',
                         groupValue: appointmentType,
@@ -420,6 +374,7 @@ class _PatientNewAppointmentScreenState
                       ),
                       const Text('In-Person'),
                       const SizedBox(width: 18),
+                      // ignore: deprecated_member_use
                       Radio<String>(
                         value: 'Virtual',
                         groupValue: appointmentType,
@@ -445,7 +400,6 @@ class _PatientNewAppointmentScreenState
                   TextField(
                     controller: notesController,
                     maxLines: 4,
-                    textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.grey.shade100,
@@ -467,17 +421,17 @@ class _PatientNewAppointmentScreenState
           children: [
             const Spacer(),
             FilledButton(
-              onPressed: _isComplete ? _save : null,
+              onPressed: _save,
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all(const Color(0xFF0046AD)),
-                padding: MaterialStateProperty.all(
+                    WidgetStateProperty.all(const Color(0xFF0046AD)),
+                padding: WidgetStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 14)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
               ),
               child: const Text(
-                'Save & Close',
+                'Book Appointment',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -521,13 +475,11 @@ class _PatientNewAppointmentScreenState
       children: [
         AppBar(
           backgroundColor: const Color(0xFF0046AD),
-          title: Text(widget.mode == 'edit'
-              ? 'Edit Appointment'
-              : 'New Appointment'),
+          title: const Text('New Appointment'),
           actions: [
             IconButton(
               icon: const Icon(Icons.save),
-              onPressed: _isComplete ? _save : null,
+              onPressed: _save,
             ),
           ],
         ),
@@ -610,6 +562,7 @@ class _PatientNewAppointmentScreenState
                     final available = e.value;
                     return ListTile(
                       leading: Radio<String>(
+                        // ignore: deprecated_member_use
                         value: time,
                         groupValue: selectedSlot,
                         onChanged: available
@@ -632,6 +585,7 @@ class _PatientNewAppointmentScreenState
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 Row(
                   children: [
+                    // ignore: deprecated_member_use
                     Radio<String>(
                       value: 'In-Person',
                       groupValue: appointmentType,
@@ -639,6 +593,7 @@ class _PatientNewAppointmentScreenState
                     ),
                     const Text('In-Person'),
                     const SizedBox(width: 12),
+                    // ignore: deprecated_member_use
                     Radio<String>(
                       value: 'Virtual',
                       groupValue: appointmentType,
@@ -649,18 +604,16 @@ class _PatientNewAppointmentScreenState
                 ),
 
                 const SizedBox(height: 14),
-                if (appointmentType == 'In-Person') ...[
-                  const Text('Select Location',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 8),
-                  _decoratedDropdown<String>(
-                    value: selectedLocation,
-                    hint: 'Choose location',
-                    items: locations.where((l) => l != 'Virtual').toList(),
-                    onChanged: (v) => setState(() => selectedLocation = v),
-                  ),
-                ],
+                const Text('Select Location',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 8),
+                _decoratedDropdown<String>(
+                  value: selectedLocation,
+                  hint: 'Choose location',
+                  items: locations,
+                  onChanged: (v) => setState(() => selectedLocation = v),
+                ),
 
                 const SizedBox(height: 14),
                 const Text('Additional Notes',
@@ -670,7 +623,6 @@ class _PatientNewAppointmentScreenState
                 TextField(
                   controller: notesController,
                   maxLines: 4,
-                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.grey.shade100,
@@ -684,7 +636,7 @@ class _PatientNewAppointmentScreenState
                 const SizedBox(height: 22),
                 Center(
                   child: ElevatedButton.icon(
-                    onPressed: _isComplete ? _save : null,
+                    onPressed: _save,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0046AD),
                       padding: const EdgeInsets.symmetric(
@@ -692,7 +644,7 @@ class _PatientNewAppointmentScreenState
                     ),
                     icon: const Icon(Icons.done),
                     label: const Text(
-                      'Save & Close',
+                      'Book Appointment',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
