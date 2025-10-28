@@ -25,6 +25,7 @@ const doctorSchema = new mongoose.Schema({
   licenseNumber: String,
   specialty: String,
   createdAt: { type: Date, default: Date.now },
+  bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
   resetPasswordToken: {
     type: String,
   },
