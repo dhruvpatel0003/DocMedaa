@@ -17,15 +17,14 @@ jobs:
         with:
           python-version: "3.11"
 
+      
       - name: Install dependencies
         run: |
-          cd frontend/docmedaa_frontend
           python -m pip install --upgrade pip
           pip install pytest
 
       - name: Run test suite
         run: |
-          cd frontend/docmedaa_frontend
-          export PYTHONPATH=.
-          python -m pytest
+          export PYTHONPATH=frontend/docmedaa_frontend
+          python -m pytest frontend/docmedaa_frontend/test
 
