@@ -22,7 +22,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
 
-      - name: Run test suite
+            - name: Run test suite
+        working-directory: frontend/docmedaa_frontend
         run: |
           python -m pytest
 
