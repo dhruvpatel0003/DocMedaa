@@ -1,0 +1,86 @@
+/* DocMedaa Logo Styling */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Logo sizes */
+.logo-small {
+  --logo-size: 30px;
+  --cross-size: 24px;
+}
+
+.logo-medium {
+  --logo-size: 32px;
+  --cross-size: 24px;
+}
+
+.logo-large {
+  --logo-size: 80px;
+  --cross-size: 64px;
+}
+
+/* Medical cross design */
+.logo-cross {
+  position: relative;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  background-color: #E63946;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+}
+
+.cross-vertical,
+.cross-horizontal {
+  position: absolute;
+  background-color: white;
+}
+
+.cross-vertical {
+  width: 8px;
+  height: var(--cross-size);
+  border-radius: 4px;
+}
+
+.cross-horizontal {
+  width: var(--cross-size);
+  height: 8px;
+  border-radius: 4px;
+}
+
+/* Logo text */
+.logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0052CC;
+  letter-spacing: -0.5px;
+}
+
+.logo-small .logo-text {
+  font-size: 16px;
+}
+
+.logo-medium .logo-text {
+  font-size: 24px;
+}
+
+.logo-large .logo-text {
+  font-size: 36px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-container {
+    gap: 8px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
+}
