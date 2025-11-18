@@ -21,7 +21,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   status: { //NEED TO IMPLEMENT
     type: String,
-    enum: ["pending", "scheduled", "reScheduled", "cancelled"],
+    // enum: ["pending", "scheduled", "reScheduled", "cancelled"],
     default: "pending",
   },
   appointmentType: {
@@ -35,8 +35,8 @@ const appointmentSchema = new mongoose.Schema({
   selectedTimeSlot: {
     from: { type: String, required: true }, // e.g. "09:00"
     to: { type: String, required: true },   // e.g. "10:00"
-    period: { type: String, enum: ["AM", "PM"], required: true }, // "AM" or "PM"
-    availabilityStatus: { type: String, enum: ["available", "not available"], required: true }
+    // period: { type: String, enum: ["AM", "PM"], required: true }, // "AM" or "PM"
+    availabilityStatus: { type: Boolean, required: true }
   },
   createdAt: {
     type: Date,

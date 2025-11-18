@@ -83,3 +83,44 @@ export const getBookmarks = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
+export const updateArticle = async (req, res) => {
+  try {
+    if (req.user.role !== "Doctor" && req.user.role !== "Admin") {
+      return res.status(403).json({ message: "Forbidden: Only Doctors/Admins can edit articles" });
+    }
+    const { id } = req.params;
+    const { title, content, category, author, imageUrl } = req.body;
+    console.log('article update content ...............',content);
+    const updateFields = {};
+    if (title !== undefined) updateFields.title = title;
+    if (content !== undefined) updateFields.content = content;
+    if (category !== undefined) updateFields.category = category;
+    if (author !== undefined) updateFields.author = author;
+    if (imageUrl !== undefined) updateFields.imageUrl = imageUrl;
+
+    const article = await Article.findByIdAndUpdate(id, updateFields, { new: true });
+    console.log('updated article...............',article);
+    if (!article) return res.status(404).json({ message: "Article not found" });
+
+    res.status(200).json({ message: "Article updated successfully", article });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating article", error: error.message });
+  }
+};
+
+export const deleteArticle = async (req, res) => {
+  try {
+    if (req.user.role !== "Doctor" && req.user.role !== "Admin") {
+      return res.status(403).json({ message: "Forbidden: Only Doctors/Admins can delete articles" });
+    }
+    const { id } = req.params;
+    const article = await Article.findByIdAndDelete(id);
+    if (!article) return res.status(404).json({ message: "Article not found" });
+
+    res.status(200).json({ message: "Article deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting article", error: error.message });
+  }
+};
+

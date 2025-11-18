@@ -13,7 +13,7 @@ const doctorSchema = new mongoose.Schema({
   phone: { type: String },
   age: { type: Number },
   address: { type: String },
-  gender: { type: String, enum: ['Male', 'Female', 'Other'] },
+  gender: { type: String, enum: ['male', 'female'] },
   role: { type: String, default: 'Doctor' }, // string type already
   hospitalName: { type: String },
   hospitalPhone: { type: String },

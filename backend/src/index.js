@@ -11,7 +11,7 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 const articleRoutes = require('./routes/articleRoutes');
 const notificationRoutes = require("./routes/notificationRoutes");
 // const sendAppointmentReminder = require("./utils/appointmentReminderEmail.js"); //NEEDS TO UPDATE
-
+const findDoctorRoutes = require('./routes/doctorRoutes');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -42,9 +42,10 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/articles", articleRoutes);
+app.use("/api/findDoctor", findDoctorRoutes);
 app.get('/', (req, res) => res.send('DocMedaa API running'));
 
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
   console.log(`Server started on port ${PORT}`);
 });
 
