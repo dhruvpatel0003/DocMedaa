@@ -43,3 +43,15 @@ export const markNotificationAsRead = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+// controllers/notificationController.js
+export const clearAllNotifications = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    await Notification.deleteMany({ recipient: userId });
+    res.status(200).json({ success: true, message: "All notifications cleared" });
+  } catch (error) {
+    console.error("Error clearing notifications:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
