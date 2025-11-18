@@ -1,0 +1,61 @@
+.help-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+  background: #f8fafc;
+  padding-top: 40px;
+}
+
+.back-dashboard-btn {
+  margin: 0 auto 24px 0;
+  display: block;
+  background: linear-gradient(90deg, #e8f0fe 0%, #f8fafc 100%);
+  border: none;
+  color: #2557D6;
+  font-size: 1.1em;
+  font-weight: 600;
+  padding: 10px 32px;
+  border-radius: 8px;
+  box-shadow: 0 1.5px 12px rgba(60,82,180,0.11);
+  transition: background 0.18s, color 0.18s, box-shadow 0.16s;
+  cursor: pointer;
+  outline: none;
+  letter-spacing: .01em;
+}
+.back-dashboard-btn:hover, .back-dashboard-btn:focus {
+  background: linear-gradient(90deg, #e3edff 0%, #dbeafc 100%);
+  color: #17389f;
+  box-shadow: 0 4px 22px rgba(30,60,160,0.11);
+}
+
+.help-card {
+  background: #fff;
+  padding: 44px 36px 36px 36px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0,82,204,0.08);
+  max-width: 550px;
+  width: 100%;
+}
+.help-card h1 {
+  color: #0052CC;
+  margin-bottom: 21px;
+}
+.faq-item {
+  margin-bottom: 22px;
+}
+.faq-question {
+  font-weight: 700;
+  color: #0052CC;
+  font-size: 1.08em;
+  margin-bottom: 1px;
+}
+.faq-answer {
+  color: #182127;
+  font-size: 1.06em;
+  margin-top: 2px;
+  padding-left: 2px;
+}
+.help-card a {
+  color: #0052CC;
+}

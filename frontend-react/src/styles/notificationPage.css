@@ -1,0 +1,66 @@
+.notifications-page {
+  max-width: 600px;
+  margin: 32px auto 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 10px;
+}
+.notifications-page h2 {
+  color: #0052cc;
+  margin-bottom: 18px;
+}
+.notification-card {
+  border-bottom: 1px solid #e0e7ef;
+  padding: 12px 0;
+  background: none;
+  transition: background 0.14s;
+}
+.notification-card.read {
+  opacity: 0.61;
+  background: #f6f9fc;
+}
+.notif-title {
+  font-weight: 700;
+  color: #0052cc;
+  margin-bottom: 4px;
+}
+.notif-message {
+  color: #212b36;
+  font-size: 1.08em;
+  margin-bottom: 2px;
+}
+.notif-meta {
+  font-size: .93em;
+  color: #667;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+.btn-mark-read {
+  background: #e3edff;
+  border: none;
+  border-radius: 5px;
+  color: #0052cc;
+  padding: 2.5px 12px;
+  font-size: .97em;
+  cursor: pointer;
+  margin-left: 8px;
+  font-weight: 600;
+  transition: background 0.14s;
+}
+.btn-mark-read:hover { background: #cbe4ff; }
+
+.clear-all-btn {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: .99em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: background 0.13s;
+}
+.clear-all-btn:hover, .clear-all-btn:focus { background: #b32423; }

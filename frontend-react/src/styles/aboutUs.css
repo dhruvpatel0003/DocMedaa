@@ -1,0 +1,6 @@
+.aboutus-page { display: flex; justify-content: center; align-items: center; min-height: 80vh; background: #f8fafc; }
+.aboutus-card { background: #fff; padding: 40px 30px; box-shadow: 0 4px 18px rgba(0,82,204,0.09); border-radius: 12px; max-width: 530px; margin: 30px; }
+.aboutus-card h1 { color: #0052CC; margin-bottom: 14px; }
+.aboutus-team h3 { margin-top: 27px; color: #2771d0; }
+.aboutus-card ul { list-style: disc; margin-left: 18px; color: #555; }
+.aboutus-contact { margin-top: 24px; font-size: 1em; color: #221; }
