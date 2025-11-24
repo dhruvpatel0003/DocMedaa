@@ -67,6 +67,7 @@ exports.cancelRequest = async (req, res) => {
 // Doctor: Approve patient
 exports.approveMember = async (req, res) => {
   const { channelId, patientId } = req.body;
+  console.log("Approving patient:", patientId, "for channel:", channelId);
   try {
     const channel = await Channel.findById(channelId);
     if (String(channel.doctor) !== String(req.user.id))
@@ -124,6 +125,7 @@ exports.getChannels = async (req, res) => {
       channels = await Channel.find({ doctor: req.user.id });
     } else {
       channels = await Channel.find();
+      console.log("Fetched channels for patient:", channels.length,channels);
     }
     res.json(channels);
   } catch (err) {
@@ -155,22 +157,59 @@ exports.sendMessage = async (req, res) => {
 };
 
 // Get messages for a channel
+// exports.getMessages = async (req, res) => {
+//   const { channelId } = req.params;
+//   try {
+//     const channel = await Channel.findById(channelId);
+//     const isDoctor = String(channel.doctor) === String(req.user.id);
+//     const isMember = channel.members.some(
+//       m => String(m.user) === String(req.user.id) && m.status === "approved"
+//     );
+//     if (!isDoctor && !isMember)
+//       return res.status(403).json({ message: "Not a member." });
+//     const messages = await Message.find({ channel: channelId }).populate(
+//       "sender",
+//       "fullName role"
+//     );
+//     res.json(messages);
+//   } catch (err) {
+//     res.status(500).json({ message: "Error fetching messages", error: err });
+//   }
+// };
+// GET /api/chat/messages/:channelId?page=1&limit=20
 exports.getMessages = async (req, res) => {
   const { channelId } = req.params;
+  const page = parseInt(req.query.page || "1", 10);
+  const limit = parseInt(req.query.limit || "20", 10);
+  const skip = (page - 1) * limit;
+
   try {
     const channel = await Channel.findById(channelId);
+    if (!channel) return res.status(404).json({ message: "Channel not found" });
+
     const isDoctor = String(channel.doctor) === String(req.user.id);
     const isMember = channel.members.some(
-      m => String(m.user) === String(req.user.id) && m.status === "approved"
+      (m) => String(m.user) === String(req.user.id) && m.status === "approved"
     );
     if (!isDoctor && !isMember)
       return res.status(403).json({ message: "Not a member." });
-    const messages = await Message.find({ channel: channelId }).populate(
-      "sender",
-      "fullName role"
-    );
-    res.json(messages);
+
+    const messages = await Message.find({ channel: channelId })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate("sender", "fullName role");
+
+    const total = await Message.countDocuments({ channel: channelId });
+
+    res.json({
+      total,
+      page,
+      limit,
+      messages,
+    });
   } catch (err) {
+    console.error("Error fetching messages:", err);
     res.status(500).json({ message: "Error fetching messages", error: err });
   }
 };

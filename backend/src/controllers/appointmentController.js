@@ -229,7 +229,7 @@ export const getAllAppointments = async (req, res) => {
         const appointments = await Appointment.find(filter)
             .populate(role === "Doctor" ? "patient" : "doctor", "fullName email")
             .sort({ date: 1 });
-        console.log("Fetched appointments:", appointments);
+        // console.log("Fetched appointments:", appointments);
         res.status(200).json(appointments);
     } catch (error) {
         res.status(500).json({ message: error.message });
