@@ -28,6 +28,7 @@ import Help from "./pages/Help";
 import NotificationsPage from "./pages/NotificationPage.jsx";
 import ChannelListPage from "./pages/chat/ChannelListPage.jsx";
 import ChannelChatPage from "./pages/chat/ChannelChatPage.jsx";
+import HistoryTab from "./pages/HistoryTab.jsx";
 
 function App() {
   return (
@@ -150,6 +151,11 @@ function App() {
             <Route path="/chat/:channelId" element={
               <ProtectedRoute>
                 <ChannelChatPage />
+              </ProtectedRoute>
+            } />
+             <Route path="/history" element={
+              <ProtectedRoute>
+                <HistoryTab />
               </ProtectedRoute>
             } />
           </Routes>
