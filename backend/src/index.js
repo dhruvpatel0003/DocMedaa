@@ -169,4 +169,38 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server started on port ${PORT}`);
 });
 
+//NEEDS TO CHECK ONCE FRONTEND IS READY ////////////////////////
+// io.on("connection", (socket) => {
+//   console.log("User connected:", socket.id);
+
+//   socket.on("joinConversation", (conversationId) => {
+//     socket.join(conversationId);
+//     console.log(`User joined conversation: ${conversationId}`);
+//   });
+
+//   socket.on("sendMessage", async ({ conversationId, senderId, message }) => {
+//     try {
+//       const newMessage = await Message.create({
+//         conversationId,
+//         senderId,
+//         message,
+//       });
+
+//       io.to(conversationId).emit("receiveMessage", newMessage);
+//       console.log("Message sent:", newMessage);
+//     } catch (err) {
+//       console.error("Error saving message:", err);
+//     }
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected:", socket.id);
+//   });
+// });
+
+// server.listen(PORT, () => {
+//   console.log(`🚀 Server running on port ${PORT}`);
+// });
+
+
 module.exports = app;
