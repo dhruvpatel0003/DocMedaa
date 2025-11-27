@@ -174,6 +174,7 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("Login request bodyyyyyyyyyyyyyyyyyyyyyyy:", req.body);
   try {
     console.log("Inside login controller");
     const { username, password } = req.body;

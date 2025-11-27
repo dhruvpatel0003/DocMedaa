@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+const mongoose = require('mongoose');
+=======
 import mongoose from "mongoose";
+>>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
 
 const appointmentSchema = new mongoose.Schema({
   patient: {
@@ -44,4 +48,9 @@ const appointmentSchema = new mongoose.Schema({
   },
 });
 
+<<<<<<< HEAD
+const Appointment = mongoose.model("Appointment", appointmentSchema);
+module.exports = Appointment;
+=======
 export default mongoose.model("Appointment", appointmentSchema);
+>>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
