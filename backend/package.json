@@ -27,14 +27,10 @@
     "mongoose": "^8.19.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.9",
-<<<<<<< HEAD
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "supertest": "^6.3.3",
     "xlsx": "^0.18.5"
-=======
-    "supertest": "^6.3.3"
->>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
