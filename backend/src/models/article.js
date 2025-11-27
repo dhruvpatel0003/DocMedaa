@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const mongoose = require('mongoose');
-=======
-import mongoose from "mongoose";
->>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
 
 const articleSchema = new mongoose.Schema(
   {
@@ -16,8 +12,4 @@ const articleSchema = new mongoose.Schema(
 );
 
 const Article = mongoose.model("Article", articleSchema);
-<<<<<<< HEAD
 module.exports = Article;
-=======
-export default Article;
->>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
