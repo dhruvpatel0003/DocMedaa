@@ -238,16 +238,108 @@ const login = async (req, res) => {
   }
 };
 
+// const completeProfile = async (req, res) => {
+//   try {
+//     console.log("Inside completeProfile controller");
+//     const { role, id } = req.params;
+//     const payload = req.body;
+//     // console.log("Payload received:", payload, req.body);
+//     if (role === "Doctor") {
+//       const doc = await Doctor.findById(id);
+//       console.log("Doctor found:", doc);
+//       // console.log("Doctor found:", doc, 'payloadddddd',payload);
+//       if (!doc) return res.status(404).json({ message: "Doctor not found" });
+//       const updatable = [
+//         "fullName",
+//         "phone",
+//         "age",
+//         "gender",
+//         "address",
+//         "hospitalName",
+//         "hospitalPhone",
+//         "hospitalEmail",
+//         "clinicTimings",
+//         "availableTreatments",
+//         "yearsOfExperience",
+//         "educationLevel",
+//         "licenseNumber",
+//         "specialty",
+//         "email",
+//       ];
+//       // console.log(updatable);
+//       updatable.forEach((k) => {
+//         console.log('key',payload[k]);
+//         if (payload[k] !== undefined) {doc[k] = payload[k];console.log('dockey',doc[k])};
+//       });
+//       await doc.save();
+//       return res.json({ message: "Profile updated", id: doc._id });
+//     } else if (role === "Patient") {
+//       console.log("inside the patient authController", payload);
+//       const pat = await Patient.findById(id);
+//       if (
+//         payload.healthConditions &&
+//         !Array.isArray(payload.healthConditions)
+//       ) {
+//         pat.healthConditions = [...payload.healthConditions];
+//         console.log("Updated healthConditions:", pat.healthConditions);
+//       }
+//       if (!pat) return res.status(404).json({ message: "Patient not found" });
+//       const updatable = [
+//         "fullName",
+//         "phone",
+//         "age",
+//         "gender",
+//         "address",
+//         "healthConditions",
+//         "treatments",
+//         "wearableLinkedDevices",
+//       ];
+//       updatable.forEach((k) => {
+//         if (payload[k] !== undefined) pat[k] = payload[k];
+//       });
+//       await pat.save();
+//       return res.json({ message: "Profile updated", id: pat._id });
+//     } else {
+//       return res.status(400).json({ message: "Invalid role param" });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ message: "Server error" });
+//   }
+// };
 const completeProfile = async (req, res) => {
   try {
     console.log("Inside completeProfile controller");
     const { role, id } = req.params;
     const payload = req.body;
-    // console.log("Payload received:", payload, req.body);
+
     if (role === "Doctor") {
       const doc = await Doctor.findById(id);
-      // console.log("Doctor found:", doc, 'payloadddddd',payload);
+      console.log("Doctor found:", doc);
       if (!doc) return res.status(404).json({ message: "Doctor not found" });
+
+      // 1) Normalize clinicTimings if it comes as { Friday: [{ start, end }], ... }
+      if (payload.clinicTimings && !Array.isArray(payload.clinicTimings)) {
+        const normalized = [];
+        // payload.clinicTimings example:
+        // { Monday: [], Friday: [{ start: "11:55", end: "14:55" }], ... }
+        Object.entries(payload.clinicTimings).forEach(([day, slots]) => {
+          if (Array.isArray(slots)) {
+            slots.forEach((slot) => {
+              if (slot && slot.start && slot.end) {
+                normalized.push({
+                  day,
+                  from: slot.start,
+                  to: slot.end,
+                });
+              }
+            });
+          }
+        });
+        console.log("Normalized clinicTimings:", normalized);
+        payload.clinicTimings = normalized;
+      }
+
       const updatable = [
         "fullName",
         "phone",
@@ -265,17 +357,24 @@ const completeProfile = async (req, res) => {
         "specialty",
         "email",
       ];
-      // console.log(updatable);
+
       updatable.forEach((k) => {
-        console.log('key',payload[k]);
-        if (payload[k] !== undefined) {doc[k] = payload[k];console.log('dockey',doc[k])};
-        ;
+        console.log("key", k, "value:", payload[k]);
+        if (payload[k] !== undefined) {
+          doc[k] = payload[k];
+          console.log("dockey", k, "=>", doc[k]);
+        }
       });
+
       await doc.save();
+      console.log("Saved doctor clinicTimings:", doc.clinicTimings);
       return res.json({ message: "Profile updated", id: doc._id });
     } else if (role === "Patient") {
       console.log("inside the patient authController", payload);
       const pat = await Patient.findById(id);
+      if (!pat) return res.status(404).json({ message: "Patient not found" });
+
+      // If healthConditions is not array, normalize to array
       if (
         payload.healthConditions &&
         !Array.isArray(payload.healthConditions)
@@ -283,7 +382,7 @@ const completeProfile = async (req, res) => {
         pat.healthConditions = [...payload.healthConditions];
         console.log("Updated healthConditions:", pat.healthConditions);
       }
-      if (!pat) return res.status(404).json({ message: "Patient not found" });
+
       const updatable = [
         "fullName",
         "phone",
@@ -294,16 +393,18 @@ const completeProfile = async (req, res) => {
         "treatments",
         "wearableLinkedDevices",
       ];
+
       updatable.forEach((k) => {
         if (payload[k] !== undefined) pat[k] = payload[k];
       });
+
       await pat.save();
       return res.json({ message: "Profile updated", id: pat._id });
     } else {
       return res.status(400).json({ message: "Invalid role param" });
     }
   } catch (err) {
-    console.error(err);
+    console.error("completeProfile error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
