@@ -1,0 +1,2 @@
+115014688198-6sfhm4fn3om8n0ertsc89nu8olbnmtg5.apps.googleusercontent.com=>CLIENT_ID
+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=>CLIENT_SECRET

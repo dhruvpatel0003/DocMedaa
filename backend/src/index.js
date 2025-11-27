@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+<<<<<<< HEAD
 const http = require('http');
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
@@ -32,12 +33,42 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false, httpOnly: true } // 'secure: true' only works if running HTTPS
 }));
+=======
+// const http = require('http');
+// const { Server } = require('socket.io');
+const connectDB = require('./config/database');
+const authRoutes = require('./routes/authRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+// const Message = require('./models/message');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+const articleRoutes = require('./routes/articleRoutes');
+const notificationRoutes = require("./routes/notificationRoutes");
+// const sendAppointmentReminder = require("./utils/appointmentReminderEmail.js"); //NEEDS TO UPDATE
+const findDoctorRoutes = require('./routes/doctorRoutes');
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+app.use(cors());
+
+// sendAppointmentReminder();
+>>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/docmedaa_dummy';
 const JWT_SECRET = process.env.JWT_SECRET || 'docmedaa_secret_dummy';
 
+<<<<<<< HEAD
 // DB connect
+=======
+// const server = http.createServer(app);
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*", 
+//     methods: ["GET", "POST"],
+//   },
+// });
+
+>>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
 if (process.env.NODE_ENV !== 'test') {
   connectDB(MONGO_URI).catch(err => {
     console.error('Failed to connect DB:', err);
@@ -52,6 +83,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/findDoctor", findDoctorRoutes);
+<<<<<<< HEAD
 app.use("/api/history",historyRoutes);
 app.use("/api/health-tracker", healthTracker);
 app.use('/api/users', userRoutes);
@@ -166,6 +198,11 @@ io.on("connection", (socket) => {
 
 // ---- Start combined HTTP + WebSocket server ----
 server.listen(PORT, '0.0.0.0', () => {
+=======
+app.get('/', (req, res) => res.send('DocMedaa API running'));
+
+app.listen(PORT,'0.0.0.0', () => {
+>>>>>>> 2416d6078d2dedfc4cbf677465fca63a637bf410
   console.log(`Server started on port ${PORT}`);
 });
 
