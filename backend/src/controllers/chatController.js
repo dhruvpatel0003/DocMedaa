@@ -465,38 +465,46 @@ exports.removeMember = async (req, res) => {
 };
 
 // Get channel info by ID
+// exports.getChannelById = async (req, res) => {
+//   try {
+//     const { channelId } = req.params;
+//     const channel = await Channel.findById(channelId)
+//       .populate("doctor", "fullName")
+//       .populate("members.user", "fullName");
+//     if (!channel)
+//       return res.status(404).json({ message: "Channel not found" });
+//     res.json(channel);
+//   } catch (err) {
+//     res.status(500).json({ message: "Error fetching channel", error: err });
+//   }
+// };
+
 exports.getChannelById = async (req, res) => {
   try {
     const { channelId } = req.params;
-    const channel = await Channel.findById(channelId)
-      .populate("doctor", "fullName")
-      .populate("members.user", "fullName");
-    if (!channel)
-      return res.status(404).json({ message: "Channel not found" });
+    const channel = await Channel.findById(channelId).populate("doctor", "fullName").populate("members.user", "fullName");
+    console.log('channel by id calledddddddd:', channelId, channel);
+    if (!channel) return res.status(404).json({ message: "Channel not found" });
     res.json(channel);
   } catch (err) {
     res.status(500).json({ message: "Error fetching channel", error: err });
   }
 };
-
-// List channels
 exports.getChannels = async (req, res) => {
   try {
     let channels;
     if (req.user.role === "Doctor") {
-      channels = await Channel.find({ doctor: req.user.id }).populate(
-        "members.user",
-        "fullName"
-      );
+      channels = await Channel.find({ doctor: req.user.id });
     } else {
-      channels = await Channel.find().populate("doctor", "fullName");
+      channels = await Channel.find();
+      console.log("Fetched channels for patient:", channels.length,channels);
     }
+    console.log('return the values from channelsssssssssss:', channels);
     res.json(channels);
   } catch (err) {
     res.status(500).json({ message: "Error fetching channels", error: err });
   }
 };
-
 // Send a message
 exports.sendMessage = async (req, res) => {
   const { channelId, message } = req.body;
@@ -513,7 +521,7 @@ exports.sendMessage = async (req, res) => {
       return res
         .status(403)
         .json({ message: "Not a member of channel." });
-
+    console.log("sendingggggggggggggggg messageeeeeeeeeee:", req.user);
     const newMsg = await Message.create({
       channel: channelId,
       sender: req.user.id,

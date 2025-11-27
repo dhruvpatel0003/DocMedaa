@@ -184,7 +184,7 @@ const login = async (req, res) => {
         .json({ message: "username and password required" });
     let profile;
     let user = await Doctor.findOne({ email: username });
-    console.log("user", user, username, password);
+    console.log("doctor userrrrrrrrrrrrrr", user);
     if (user) {
       userType = "Doctor";
       profile = {
@@ -208,6 +208,7 @@ const login = async (req, res) => {
       };
     } else {
       user = await Patient.findOne({ email: username });
+      console.log("patient userrrrrrrrrrr", user);
       if (user) {
         userType = "Patient";
         profile = {
