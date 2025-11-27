@@ -4,7 +4,8 @@ const channelSchema = new mongoose.Schema({
   doctor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   members: [
     {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      // user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      user: { type: mongoose.Schema.Types.ObjectId, ref: "Patient" },
       status: { type: String, enum: ["pending", "approved"], default: "pending" }
     }
   ]
