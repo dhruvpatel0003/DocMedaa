@@ -1,0 +1,161 @@
+.history-tab {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.history-notice {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #856404;
+}
+
+.notice-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.notice-icon {
+  font-size: 20px;
+}
+
+.export-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin-left: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.export-btn:hover {
+  background: #0056b3;
+}
+
+.appointments-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 24px;
+}
+
+.appointments-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+}
+
+.no-appointments {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appointment-card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  background: #f8f9fa;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.appointment-date {
+  font-weight: 600;
+  color: #333;
+}
+
+.appointment-time {
+  font-size: 14px;
+  color: #666;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.appointment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.label {
+  font-weight: 600;
+  color: #555;
+  min-width: 80px;
+}
+
+.value {
+  color: #333;
+  flex: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .history-tab {
+    padding: 16px;
+  }
+  
+  .appointment-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .status-badge {
+    align-self: flex-start;
+  }
+  
+  .detail-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .label {
+    min-width: auto;
+  }
+}
