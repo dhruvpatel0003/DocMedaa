@@ -11,7 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 import "./styles/global.css";
 
-// Pages
+// Pages imports...
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import CompleteProfilePage from "./pages/CompleteProfilePage";
@@ -29,6 +29,7 @@ import NotificationsPage from "./pages/NotificationPage.jsx";
 import ChannelListPage from "./pages/chat/ChannelListPage.jsx";
 import ChannelChatPage from "./pages/chat/ChannelChatPage.jsx";
 import HistoryTab from "./pages/HistoryTab.jsx";
+import GoogleFitHealthData from "./pages/GoogleFitHealthData.jsx";
 
 function App() {
   return (
@@ -124,6 +125,48 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/notification"
+              element={
+                <ProtectedRoute>
+                  <NotificationsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/channels"
+              element={
+                <ProtectedRoute>
+                  <ChannelListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat/:channelId"
+              element={
+                <ProtectedRoute>
+                  <ChannelChatPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <ProtectedRoute>
+                  <HistoryTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/health-tracker"
+              element={
+                <ProtectedRoute>
+                  <GoogleFitHealthData />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/help" element={<Help />} />
             <Route path="/" element={<Navigate to="/dashboard" />} />
             <Route
               path="*"
@@ -133,31 +176,6 @@ function App() {
                 </div>
               }
             />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/help" element={<Help />} />
-            <Route
-              path="/notification"
-              element={
-                <ProtectedRoute>
-                  <NotificationsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/channels" element={
-              <ProtectedRoute>
-                <ChannelListPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/chat/:channelId" element={
-              <ProtectedRoute>
-                <ChannelChatPage />
-              </ProtectedRoute>
-            } />
-             <Route path="/history" element={
-              <ProtectedRoute>
-                <HistoryTab />
-              </ProtectedRoute>
-            } />
           </Routes>
         </AuthProvider>
       </Router>
