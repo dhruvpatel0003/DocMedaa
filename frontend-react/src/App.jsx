@@ -30,6 +30,7 @@ import ChannelListPage from "./pages/chat/ChannelListPage.jsx";
 import ChannelChatPage from "./pages/chat/ChannelChatPage.jsx";
 import HistoryTab from "./pages/HistoryTab.jsx";
 import GoogleFitHealthData from "./pages/GoogleFitHealthData.jsx";
+import ShowGoogleFitData from "./pages/ShowGoogleFitData.jsx";
 
 function App() {
   return (
@@ -174,6 +175,14 @@ function App() {
                 <div style={{ padding: "40px", textAlign: "center" }}>
                   <h1>404 - Page Not Found</h1>
                 </div>
+              }
+            />
+            <Route
+              path="/show-google-fit"
+              element={
+                <ProtectedRoute>
+                  <ShowGoogleFitData />
+                </ProtectedRoute>
               }
             />
           </Routes>
