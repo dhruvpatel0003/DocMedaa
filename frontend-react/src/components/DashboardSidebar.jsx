@@ -13,7 +13,7 @@ const DashboardSidebar = ({ isOpen, onClose, unreadCount = 0 }) => {
   const baseNavItems = [
     { id: 'home', label: 'Home', icon: '🏠', path: '/dashboard' },
     { id: 'notification', label: 'Notification', icon: '🔔', path: '/notification' },
-    { id: 'tracker', label: 'My Tracker', icon: '📊', path: '/tracker' },
+    { id: 'tracker', label: 'My Tracker', icon: '📊', path: '/health-tracker' },
     { id: 'history', label: 'History', icon: '📜', path: '/history' },
     { id: 'about', label: 'About Us', icon: 'ℹ️', path: '/about-us' },
   ];

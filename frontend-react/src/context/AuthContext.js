@@ -157,6 +157,18 @@ export const AuthProvider = ({ children }) => {
   const isPatient = () => user?.role?.toLowerCase() === 'patient';
   const isAdmin = () => user?.role?.toLowerCase() === 'admin';
   console.log("AuthContext user role:", user, user.role,isDoctor());
+  // helper: update localStorage userProfile from a partial update
+const updateStoredProfile = (partial) => {
+  const existing = localStorage.getItem("userProfile");
+  let profile = {};
+  try {
+    profile = existing ? JSON.parse(existing) : {};
+  } catch {
+    profile = {};
+  }
+  const updated = { ...profile, ...partial };
+  localStorage.setItem("userProfile", JSON.stringify(updated));
+};
   const value = {
     user,
     isAuthenticated,
@@ -169,7 +181,9 @@ export const AuthProvider = ({ children }) => {
     login,
     signup,
     logout,
+    updateStoredProfile
   };
+
 
   return (
     <AuthContext.Provider value={value}>
