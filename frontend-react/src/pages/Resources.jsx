@@ -6,6 +6,8 @@ import { showSnackBar } from "../utils/helpers";
 import { AppConstants } from "../constants/AppConstants";
 import "../styles/resourcePage.css";
 
+const theme = AppConstants;
+
 const categories = ["All", "Nutrition", "Mental Health", "Fitness", "General"];
 
 const ResourcesPage = () => {
@@ -165,12 +167,24 @@ const ResourcesPage = () => {
 
   return (
     <div className="resources-page">
-      <button
+      {/* <button
         className="back-dashboard-btn"
         onClick={() => navigate("/dashboard")}
       >
         ← Back to Dashboard
-      </button>
+      </button> */}
+       <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
       <div className="resources-header">
         <h1>Health Resources</h1>
         <div className="resources-toolbar">

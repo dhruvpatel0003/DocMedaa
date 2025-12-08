@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/AuthContext";
 import DashboardLayout from "../components/DashboardLayout";
@@ -8,6 +8,8 @@ import { showSnackBar } from "../utils/helpers";
 import { updateUserData } from "../redux/userSlice";
 import ApiService from "../services/ApiService";
 import "../styles/ProfilePage.css";
+import { AppConstants } from "../constants/AppConstants";
+const theme = AppConstants;
 const defaultDays = [
   "Monday",
   "Tuesday",
@@ -29,7 +31,7 @@ const getInitialClinicTimings = (userTimings) => {
 const ProfilePage = () => {
   const { user } = useAuth();
   const reduxUser = useSelector((state) => state.user);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { updateStoredProfile } = useAuth();
 
@@ -195,6 +197,18 @@ const ProfilePage = () => {
   return (
     <DashboardLayout>
       <div className="profile-page">
+         <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
         <div className="profile-header">
           <h1>My Profile</h1>
           <p>View and manage your profile information</p>
@@ -408,12 +422,12 @@ const ProfilePage = () => {
           )}
         </div>
 
-        <button
+        {/* <button
           className="btn btn-secondary back-btn"
           onClick={() => navigate("/dashboard")}
         >
           ← Back to Dashboard
-        </button>
+        </button> */}
 
         {/* Edit Modal */}
         {editingSection && (
