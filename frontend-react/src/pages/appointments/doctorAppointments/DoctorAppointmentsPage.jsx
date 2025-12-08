@@ -49,6 +49,13 @@ const DoctorAppointmentsPage = () => {
     calculateStats();
   }, [appointments]);
 
+  // ========= HELPERS =========
+  const sameYMD = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  // ========= API =========
   const fetchAllAppointments = async () => {
     setIsLoading(true);
     try {
@@ -58,10 +65,16 @@ const DoctorAppointmentsPage = () => {
         null,
         userToken
       );
+
       const appts = Array.isArray(res.data) ? res.data : [];
-      appts.forEach(
-        (app) => (app.appointmentDate = new Date(app.appointmentDate))
-      );
+
+      appts.forEach((app) => {
+        app.appointmentDate = new Date(app.appointmentDate);
+        if (typeof app.status === "string") {
+          app.status = app.status.toLowerCase(); // normalize once
+        }
+      });
+      console.log("Fetched appointments:", appts);
       setAppointments(appts);
     } catch {
       showSnackBar("Failed to load appointments");
@@ -135,36 +148,40 @@ const DoctorAppointmentsPage = () => {
     if (filterType !== "all") {
       filtered = filtered.filter((apt) => apt.appointmentType === filterType);
     }
+
     setFilteredAppointments(filtered);
   };
 
   // Calculates today's stats
   const calculateStats = () => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayAppointments = appointments.filter((apt) => {
-      const aptDate = new Date(apt.appointmentDate);
-      aptDate.setHours(0, 0, 0, 0);
-      return aptDate.getTime() === today.getTime();
-    });
+
+    const todayAppointments = appointments.filter((apt) =>
+      sameYMD(today, new Date(apt.appointmentDate))
+    );
+
     const completed = todayAppointments.filter(
-      (apt) =>
-        apt.status &&
-        apt.status.toLowerCase &&
-        apt.status.toLowerCase() === "completed"
+      (apt) => typeof apt.status === "string" && apt.status === "completed"
     ).length;
+
     const total = todayAppointments.length;
     const remaining = total - completed;
+
     setAppointmentStats({ total, completed, remaining });
   };
 
   // Tabs filter function
   const getTabAppointments = () => {
     if (statusTab === "all") return filteredAppointments;
-    if (statusTab === "completed") return filteredAppointments.filter(a => a.status === "completed");
-    if (statusTab === "cancelled") return filteredAppointments.filter(a => a.status === "cancelled");
+    if (statusTab === "completed")
+      return filteredAppointments.filter((a) => a.status === "completed");
+    if (statusTab === "cancelled")
+      return filteredAppointments.filter((a) => a.status === "cancelled");
     // Upcoming = not completed or cancelled
-    if (statusTab === "upcoming") return filteredAppointments.filter(a => a.status !== "completed" && a.status !== "cancelled");
+    if (statusTab === "upcoming")
+      return filteredAppointments.filter(
+        (a) => a.status !== "completed" && a.status !== "cancelled"
+      );
     return filteredAppointments;
   };
 
@@ -187,8 +204,9 @@ const DoctorAppointmentsPage = () => {
       scheduled: "#007BFF",
       completed: "#28A745",
       cancelled: "#DC3545",
-      reScheduled: "#6C757D",
+      rescheduled: "#6C757D",
     }[status] || "#6C757D");
+
   const getTypeIcon = (type) =>
     ({
       "in-person": "🏥",
@@ -221,7 +239,7 @@ const DoctorAppointmentsPage = () => {
   // Tabs for status
   const renderTabs = () => (
     <div className="status-tabs" style={{ marginBottom: 16 }}>
-      {["all", "completed", "cancelled", "upcoming"].map(tab => (
+      {["all", "completed", "cancelled", "upcoming"].map((tab) => (
         <button
           key={tab}
           className={statusTab === tab ? "active" : ""}
@@ -231,7 +249,7 @@ const DoctorAppointmentsPage = () => {
             padding: "6px 18px",
             borderRadius: "6px",
             border: statusTab === tab ? "2px solid #0052cc" : "1px solid #ddd",
-            background: statusTab === tab ? "#e8f0fe" : "#fff"
+            background: statusTab === tab ? "#e8f0fe" : "#fff",
           }}
           onClick={() => setStatusTab(tab)}
         >
@@ -284,56 +302,57 @@ const DoctorAppointmentsPage = () => {
       </div>
     </div>
   );
-const renderFilters = () => (
-  <div className="filter-section">
-    <h3>Filters</h3>
-    <div className="filter-controls">
-      <div className="filter-group">
-        <label>From Date:</label>
-        <input
-          type="date"
-          value={filterDateFrom}
-          onChange={(e) => setFilterDateFrom(e.target.value)}
-          className="filter-input"
-        />
+
+  const renderFilters = () => (
+    <div className="filter-section">
+      <h3>Filters</h3>
+      <div className="filter-controls">
+        <div className="filter-group">
+          <label>From Date:</label>
+          <input
+            type="date"
+            value={filterDateFrom}
+            onChange={(e) => setFilterDateFrom(e.target.value)}
+            className="filter-input"
+          />
+        </div>
+        <div className="filter-group">
+          <label>To Date:</label>
+          <input
+            type="date"
+            value={filterDateTo}
+            onChange={(e) => setFilterDateTo(e.target.value)}
+            className="filter-input"
+          />
+        </div>
+        <div className="filter-group">
+          <label>Appointment Type:</label>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Types</option>
+            <option value="in-person">In-Person</option>
+            <option value="virtual">Virtual</option>
+            <option value="telehealth">Telehealth</option>
+          </select>
+        </div>
+        {(filterDateFrom || filterDateTo || filterType !== "all") && (
+          <button
+            className="btn-clear-filters"
+            onClick={() => {
+              setFilterDateFrom("");
+              setFilterDateTo("");
+              setFilterType("all");
+            }}
+          >
+            Clear Filters
+          </button>
+        )}
       </div>
-      <div className="filter-group">
-        <label>To Date:</label>
-        <input
-          type="date"
-          value={filterDateTo}
-          onChange={(e) => setFilterDateTo(e.target.value)}
-          className="filter-input"
-        />
-      </div>
-      <div className="filter-group">
-        <label>Appointment Type:</label>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="filter-select"
-        >
-          <option value="all">All Types</option>
-          <option value="in-person">In-Person</option>
-          <option value="virtual">Virtual</option>
-          <option value="telehealth">Telehealth</option>
-        </select>
-      </div>
-      {(filterDateFrom || filterDateTo || filterType !== "all") && (
-        <button
-          className="btn-clear-filters"
-          onClick={() => {
-            setFilterDateFrom("");
-            setFilterDateTo("");
-            setFilterType("all");
-          }}
-        >
-          Clear Filters
-        </button>
-      )}
     </div>
-  </div>
-);
+  );
 
   const renderDetailsModal = () => {
     if (!selectedAppointment) return null;

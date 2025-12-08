@@ -109,7 +109,7 @@ const DashboardPage = () => {
               </>
             )}
 
-            {isDoctor && (
+            {/* {isDoctor && (
               <>
                 <button
                   className="action-card"
@@ -142,6 +142,59 @@ const DashboardPage = () => {
                   </span>
                   <span className="action-desc">Medical resources</span>
                 </button>
+                <button
+                  className="action-card"
+                  onClick={() => navigate("/help")}
+                >
+                  <span className="action-icon">❓</span>
+                  <span className="action-title">Help</span>
+                  <span className="action-desc">Get assistance</span>
+                </button>
+              </>
+            )} */}
+            {isDoctor && (
+              <>
+                <button
+                  className="action-card"
+                  onClick={() => navigate("/doctor/appointments")}
+                >
+                  <span className="action-icon">📅</span>
+                  <span className="action-title">Appointments</span>
+                  <span className="action-desc">Manage appointments</span>
+                </button>
+
+                <button
+                  className="action-card"
+                  onClick={() => navigate("/channels")}
+                >
+                  <span className="action-icon">💬</span>
+                  <span className="action-title">Chat with Patients</span>
+                  <span className="action-desc">Patient conversations</span>
+                </button>
+
+                {/* UPDATED: view patient health data instead of generic Devices */}
+                <button
+                  className="action-card"
+                  onClick={() => navigate("/doctor/wearable-data")}
+                >
+                  <span className="action-icon">📊</span>
+                  <span className="action-title">Patient Health Data</span>
+                  <span className="action-desc">
+                    View shared wearable metrics
+                  </span>
+                </button>
+
+                <button className="action-card">
+                  <span className="action-icon">📚</span>
+                  <span
+                    className="action-title"
+                    onClick={() => navigate("/resources")}
+                  >
+                    Resources
+                  </span>
+                  <span className="action-desc">Medical resources</span>
+                </button>
+
                 <button
                   className="action-card"
                   onClick={() => navigate("/help")}
@@ -189,9 +242,8 @@ const DashboardPage = () => {
                     </div>
                     <div>
                       <span className="ac-label">Type: </span>
-                      {(a.appointmentType || "").replace(
-                        /^\w/,
-                        (c) => c.toUpperCase()
+                      {(a.appointmentType || "").replace(/^\w/, (c) =>
+                        c.toUpperCase()
                       )}
                     </div>
                     <div>

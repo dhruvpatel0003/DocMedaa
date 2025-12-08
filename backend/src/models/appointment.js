@@ -26,7 +26,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   appointmentType: {
     type: String,
-    enum: ["in-person", "virtual", "telehealth"],
+    enum: ["in-person", "virtual", "telehealth","in_person"],
     default: "in-person",
   },
   notes: {

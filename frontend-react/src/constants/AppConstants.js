@@ -98,7 +98,7 @@ export const AppConstants = {
   roleAdmin: 'Admin',
 
   // API Configuration
-  apiBaseUrl: process.env.REACT_APP_API_URL || 'http://192.168.1.171:5000/api',
+  apiBaseUrl: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
   apiTimeout: 30000,
 
   // Routes

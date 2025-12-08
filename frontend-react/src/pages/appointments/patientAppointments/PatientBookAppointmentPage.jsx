@@ -87,6 +87,7 @@ const PatientBookAppointmentPage = () => {
 
   const fetchAvailableSlots = async () => {
     setIsLoading(true);
+    console.log('Fetching available slots for doctorrrrrrrrrrrrrrr:');
     try {
       const response = await ApiService.request(
         `/appointments/available-slots?doctorId=${formData.doctorId}&date=${formData.appointmentDate}`,
@@ -96,6 +97,7 @@ const PatientBookAppointmentPage = () => {
       );
       console.log('Available slots response:', response);
       if (response.success) {
+        console.log('Available slots data:', response.data);
         setAvailableSlots(response.data);
       } else {
         showSnackBar('Failed to load available slots');

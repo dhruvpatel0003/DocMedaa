@@ -21,6 +21,9 @@ const patientSchema = new mongoose.Schema({
   resetPasswordExpires: {
     type: Date,
   },
+  sharedGoogleFitWith: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "User" } // doctor IDs
+  ],
 });
 
 patientSchema.index({ email: 1 }, { unique: true });

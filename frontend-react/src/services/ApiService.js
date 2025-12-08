@@ -6,7 +6,7 @@ const API_BASE_URL = AppConstants.apiBaseUrl;
 class ApiService {  
   // Generic fetch method
   static async request(endpoint, method = 'GET', data = null, token = null) {
-    console.log('Update the article :::::::::::::: ',data, endpoint);
+    console.log('inside the requesttttttttttttt :::::::::::::: ',data, endpoint);
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -26,6 +26,7 @@ class ApiService {
     }
 
     try {
+      console.log("before fetching the app",API_BASE_URL,endpoint,config);
       const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
       const responseData = await response.json();
 
