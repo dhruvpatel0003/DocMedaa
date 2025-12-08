@@ -31,6 +31,7 @@ import ChannelChatPage from "./pages/chat/ChannelChatPage.jsx";
 import HistoryTab from "./pages/HistoryTab.jsx";
 import GoogleFitHealthData from "./pages/GoogleFitHealthData.jsx";
 import ShowGoogleFitData from "./pages/ShowGoogleFitData.jsx";
+import DoctorGoogleFitView from "./pages/DoctorGoogleFitView.jsx";
 
 function App() {
   return (
@@ -182,6 +183,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ShowGoogleFitData />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/wearable-data"
+              element={
+                <ProtectedRoute>
+                  <DoctorGoogleFitView />
                 </ProtectedRoute>
               }
             />

@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
         console.log("Attempting login for:", username,password);
       const response = await ApiService.login({ username, password });
-
+      console.log("Login response:", response);
       if (response.success) {
         const { profile, token } = response.data;
 
