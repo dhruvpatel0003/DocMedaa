@@ -76,6 +76,18 @@ function DoctorGoogleFitView() {
         }}
       >
         <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
+        <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
           <h2
             style={{
               margin: 0,

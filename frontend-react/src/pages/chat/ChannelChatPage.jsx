@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/ChannelChat.css";
 import { socket } from "../../socket";
+import  { AppConstants } from "../../constants/AppConstants";
+const theme = AppConstants;
 
 const ChannelChatPage = () => {
   const { channelId } = useParams();
@@ -156,6 +158,19 @@ const ChannelChatPage = () => {
       : channelInfo?.name?.[0] || "C";
 
   return (
+    <div>
+       <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/channels"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
     <div className="chat-outer-wrap">
       <div className="chat-header">
         <div className="chat-avatar">{headerAvatar}</div>
@@ -228,6 +243,7 @@ const ChannelChatPage = () => {
           Send
         </button>
       </form>
+    </div>
     </div>
   );
 };

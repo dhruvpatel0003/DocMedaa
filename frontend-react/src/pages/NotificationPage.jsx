@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import ApiService from "../services/ApiService";
 import { showSnackBar } from "../utils/helpers";
 import "../styles/notificationPage.css";    
 import "../styles/help.css";
+import { AppConstants } from "../constants/AppConstants";
+const theme = AppConstants;
 
 const NotificationsPage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
@@ -62,12 +64,24 @@ const NotificationsPage = () => {
 
   return (
     <div className="notifications-page">
-      <button
+      {/* <button
         className="back-dashboard-btn"
         onClick={() => navigate("/dashboard")}
       >
         ← Back to Dashboard
-      </button>
+      </button> */}
+ <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
       <div
         style={{
           display: "flex",

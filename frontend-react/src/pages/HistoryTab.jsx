@@ -3,10 +3,12 @@ import { useAuth } from "../context/AuthContext";
 import ApiService from "../services/ApiService";
 import { showSnackBar } from "../utils/helpers";
 import "../styles/history.css";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { AppConstants } from "../constants/AppConstants";
+const theme = AppConstants;
 
 const HistoryTab = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,12 +96,24 @@ const HistoryTab = () => {
 
       {/* Appointments list */}
       <div className="appointments-container">
-        <button
+        {/* <button
           className="back-dashboard-btn"
           onClick={() => navigate("/dashboard")}
         >
           ← Back to Dashboard
-        </button>
+        </button> */}
+         <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
         <h2>
           {/* {user.role === 'doctor' ? 'Doctor' : 'Patient'}  */}
           Appointment History

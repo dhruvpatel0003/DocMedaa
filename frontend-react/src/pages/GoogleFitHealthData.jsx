@@ -4,6 +4,7 @@ import ApiService from "../services/ApiService";
 import { useAuth } from "../context/AuthContext";
 import DashboardLayout from "../components/DashboardLayout";
 import { AppConstants } from "../constants/AppConstants";
+const theme = AppConstants;
 
 function GoogleFitHealthData() {
   const { user } = useAuth();
@@ -66,6 +67,18 @@ function GoogleFitHealthData() {
             padding: theme.paddingLarge,
           }}
         >
+           <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
           <h2
             style={{
               marginTop: 0,

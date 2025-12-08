@@ -3,6 +3,8 @@ import ApiService from "../../services/ApiService";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../../styles/ChannelChat.css";
+import { AppConstants } from "../../constants/AppConstants";
+const theme = AppConstants;
 
 const TABS_DOCTOR = [
   { key: "approved", label: "Chats" },
@@ -133,6 +135,18 @@ const ChannelListPage = () => {
 
   return (
     <div style={{ maxWidth: 700, margin: "28px auto 0 auto" }}>
+       <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+          <a
+            href="/dashboard"
+            style={{
+              color: theme.themeColor,
+              textDecoration: "none",
+              fontSize: theme.fontMedium,
+            }}
+          >
+            ← Back to Dashboard
+          </a>
+        </div>
       <div className="channel-tabs">
         {(isDoctor ? TABS_DOCTOR : TABS_PATIENT).map((obj) => (
           <button
