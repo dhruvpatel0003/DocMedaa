@@ -159,7 +159,7 @@ const ChannelChatPage = () => {
 
   return (
     <div>
-       <div style={{ marginBottom: theme.mediumSizeBoxHeight }}>
+       <div style={{ alignItems: "center", marginBottom: theme.mediumSizeBoxHeight }}>
           <a
             href="/channels"
             style={{

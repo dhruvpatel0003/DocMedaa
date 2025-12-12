@@ -90,12 +90,22 @@ const DashboardPage = () => {
                   <span className="action-icon">💬</span>
                   <span className="action-title">Messages</span>
                   <span className="action-desc">Chat with doctors</span>
+                </button>{" "}
+                <button
+                  className="action-card"
+                  onClick={() => navigate("/care-plan")}
+                >
+                  <span className="action-icon">📋</span>
+                  <span className="action-title">My Care Plans</span>
+                  <span className="action-desc">
+                    See plans from your doctors
+                  </span>
                 </button>
-                <button className="action-card">
+                {/* <button className="action-card">
                   <span className="action-icon">📋</span>
                   <span className="action-title">My Records</span>
                   <span className="action-desc">View medical records</span>
-                </button>
+                </button> */}
                 <button className="action-card">
                   <span className="action-icon">📚</span>
                   <span

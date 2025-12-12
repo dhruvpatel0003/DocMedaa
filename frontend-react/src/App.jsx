@@ -32,6 +32,7 @@ import HistoryTab from "./pages/HistoryTab.jsx";
 import GoogleFitHealthData from "./pages/GoogleFitHealthData.jsx";
 import ShowGoogleFitData from "./pages/ShowGoogleFitData.jsx";
 import DoctorGoogleFitView from "./pages/DoctorGoogleFitView.jsx";
+import PatientCarePlan from "./pages/PatientCarePlan.jsx";
 
 function App() {
   return (
@@ -191,6 +192,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DoctorGoogleFitView />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/care-plan"
+              element={
+                <ProtectedRoute>
+                  <PatientCarePlan />
                 </ProtectedRoute>
               }
             />
