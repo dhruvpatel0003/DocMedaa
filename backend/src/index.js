@@ -188,6 +188,7 @@ const findDoctorRoutes = require("./routes/doctorRoutes");
 const historyRoutes = require("./routes/historyRoutes");
 const healthTracker = require("./routes/healthTrackerRoutes");
 const userRoutes = require("./routes/userRoutes");
+const carePlanRoutes = require("./routes/carePlanRoutes");
 
 const Channel = require("./models/channel");
 const Message = require("./models/message");
@@ -233,6 +234,8 @@ app.use("/api/findDoctor", findDoctorRoutes);
 app.use("/api/history", historyRoutes);
 app.use("/api/health-tracker", healthTracker);
 app.use("/api/users", userRoutes);
+app.use("/api/care-plans", carePlanRoutes);
+
 app.get("/", (req, res) => res.send("DocMedaa API running"));
 
 // HTTP + Socket.IO
